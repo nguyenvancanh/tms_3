@@ -46,4 +46,15 @@ class UsersController extends AppController {
 		$this->redirect($this->CustomAuth->logout());
 	}
 
+	public function add() {
+		$this->set('title_for_layout', __('Register'));
+		if ($this->request->is('post')) {
+			$this->User->create();
+			if ($this->User->save($this->request->data)) {
+				$this->CustomUtil->flash(__('Register successfully !'), 'success');
+				$this->redirect(['controller' => 'users', 'action' => 'login']);
+			}
+		}
+	}
+
 }

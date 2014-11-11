@@ -23,3 +23,12 @@
 :root input[type='text']:hover, :root input[type='password']:hover, :root input[type='email']:hover, :root input[type='number']:hover, :root input[type='tel']:hover, :root input[type='search']:hover, :root textarea:hover {
 border-color: #8f8f8f;
 }
+.register {
+	margin-top: 50px;
+}
+.signup {
+	float: right;
+	font-size: 85%;
+	position: relative;
+	top: -10px;
+}

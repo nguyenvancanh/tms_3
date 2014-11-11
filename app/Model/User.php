@@ -15,6 +15,36 @@ App::uses('AppModel', 'Model');
 class User extends AppModel {
 
 	public $actsAs = ['Multivalidatable'];
+	public $validate = [
+		'username' => [
+			'valid' => [
+				'rule' => 'alphaNumeric',
+				'message' => 'Username must be alpha numberic'
+			],
+			'between' => [
+				'rule' => ['between', 6, 32],
+				'message' => 'Between %d to %d characters'
+			],
+			'isUnique' => [
+				'rule' => 'isUnique',
+				'message' => 'The username has already been taken.',
+			]
+		],
+		'password' => [
+			'rule' => ['minLength', 6],
+			'message' => 'Minimum %d characters long'
+		],
+		'name' => [
+			'notEmpty' => [
+				'rule' => 'notEmpty',
+				'message' => 'Full name required'
+			]
+		],
+		'password_confirm' => [
+			'rule' => 'passwordEqualValidation',
+			'message' => 'Confirm password not correct',
+		]
+	];
 	public $validationSets = [
 		'admin_edit' => [
 			'name' => ['rule' => 'notEmpty', 'message' => 'Enter name of user'],
@@ -76,6 +106,17 @@ class User extends AppModel {
 
 	public function matchPasswords() {
 		return $this->data[$this->alias]['password'] == $this->data[$this->alias]['password_confirm'];
+	}
+
+	public function beforeSave($options = array()) {
+		if (isset($this->data[$this->alias]['password'])) {
+			$this->data[$this->alias]['password'] = CustomAuthComponent::password($this->data[$this->alias]['password']);
+		}
+		return TRUE;
+	}
+
+	public function passwordEqualValidation() {
+		return ($this->data[$this->alias]['password_confirm'] == $this->data[$this->alias]['password']);
 	}
 
 }
