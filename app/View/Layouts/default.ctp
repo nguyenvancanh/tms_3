@@ -1,63 +1,58 @@
-<?php
-/**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.View.Layouts
- * @since         CakePHP(tm) v 0.10.0.1076
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
-
-$cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
-$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
-?>
 <!DOCTYPE html>
 <html>
-<head>
-	<?php echo $this->Html->charset(); ?>
-	<title>
-		<?php echo $cakeDescription ?>:
-		<?php echo $this->fetch('title'); ?>
-	</title>
-	<?php
+	<head>
+		<?php echo $this->Html->charset(); ?>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>
+			<?php echo $this->fetch('title'); ?>
+		</title>
+		<?php
 		echo $this->Html->meta('icon');
-
-		echo $this->Html->css('cake.generic');
-
+		echo $this->Html->css([
+			'bootstrap.min',
+			'plugins/metisMenu/metisMenu.min.css',
+			'sb-admin-2.css',
+			'font-awesome-4.1.0/css/font-awesome.min.css',
+			'style'
+		]);
+		echo $this->Html->script([
+			'jquery',
+			'bootstrap.min',
+			'plugins/metisMenu/metisMenu.min',
+			'sb-admin-2.js'
+		]);
+		?>
+		<!--[if lt IE 9]>
+		<script src = "https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+		<?php
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
-	?>
-</head>
-<body>
-	<div id="container">
-		<div id="header">
-			<h1><?php echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1>
-		</div>
-		<div id="content">
+		?>
+	</head>
+	<body>
+		<?php if (CustomAuthComponent::isLogged()): ?>
+			<div id="wrapper">
+				<?php echo $this->element('navbar') ?>
+				<div id="page-wrapper">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-lg-12">
+								<?php echo $this->fetch('content'); ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<?php else: ?>
+			<?php echo $this->element('default/navbar') ?>
+			<div class="container">
+				<?php echo $this->fetch('content'); ?>
+			</div>
+		<?php endif; ?>
 
-			<?php echo $this->Session->flash(); ?>
-
-			<?php echo $this->fetch('content'); ?>
-		</div>
-		<div id="footer">
-			<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-					'http://www.cakephp.org/',
-					array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
-				);
-			?>
-			<p>
-				<?php echo $cakeVersion; ?>
-			</p>
-		</div>
-	</div>
-	<?php echo $this->element('sql_dump'); ?>
-</body>
+	</body>
 </html>
