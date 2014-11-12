@@ -15,6 +15,14 @@ class AppController extends Controller {
 
 	public function beforeFilter() {
 		$this->CustomAuth->allow('index', 'view');
+		if (isset($this->request->params['admin']) && CustomAuthComponent::user('is_admin') != 1) {
+			$this->redirect('/');
+		}
+	}
+
+	public function afterFilter() {
+		parent::afterFilter();
+		$this->Session->delete('Message.notify');
 	}
 
 }

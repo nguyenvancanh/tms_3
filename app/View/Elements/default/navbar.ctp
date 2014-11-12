@@ -7,12 +7,12 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a href="../" class="navbar-brand"><?= __('Training System') ?></a>
+			<?= $this->Html->link(__('Training System'), '/', ['class' => 'navbar-brand']) ?>
 		</div>
 		<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="#"><?= __('Login') ?></a></li>
-				<li><a href="#"><?= __('Register') ?></a></li>
+				<li><?= $this->Html->link(__('Login'), '/login') ?></li>
+				<li><?= $this->Html->link(__('Register'), '/register') ?></li>
 			</ul>
 		</nav>
 	</div>
