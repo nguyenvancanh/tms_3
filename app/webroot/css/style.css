@@ -32,3 +32,11 @@ border-color: #8f8f8f;
 	position: relative;
 	top: -10px;
 }
+.pad-left-10{
+	padding-left: 10px !important;
+}
+.pad_top_10 {
+	margin-bottom: 10px !important;
+	margin-left: 130px;
+	width: 100px !important;
+}

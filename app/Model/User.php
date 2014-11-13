@@ -1,18 +1,11 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 App::uses('AppModel', 'Model');
 
-/**
- * CakePHP User
- * @author thanhtr
- */
 class User extends AppModel {
+
+	const LIMIT_PER_PAGES = 10;
+	const LIMIT_SEARCH_ITEMS = 20;
 
 	public $actsAs = ['Multivalidatable'];
 	public $validate = [
@@ -118,5 +111,9 @@ class User extends AppModel {
 	public function passwordEqualValidation() {
 		return ($this->data[$this->alias]['password_confirm'] == $this->data[$this->alias]['password']);
 	}
-
+	
+	public function getRole() {
+		$role = [0 => __('Member'), 1 => __('Admin')];
+		return $role;
+	}
 }
