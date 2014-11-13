@@ -3,3 +3,23 @@
 	background-color: #fff;
 	border-bottom: 0;
 }
+.form-base{
+	width: 80%;
+	min-width: 40%;
+	margin: 0 auto;
+}
+.form-base input[class='form-control'] {
+	height: 40px;
+	font-size: 14px;
+	border-radius: 0 !important;
+	color: #303030;
+}
+.form-base .btn {
+	border-radius: 0;
+}
+.submit{
+	margin-top: 15px;
+}
+:root input[type='text']:hover, :root input[type='password']:hover, :root input[type='email']:hover, :root input[type='number']:hover, :root input[type='tel']:hover, :root input[type='search']:hover, :root textarea:hover {
+border-color: #8f8f8f;
+}

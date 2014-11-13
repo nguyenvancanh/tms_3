@@ -3,6 +3,6 @@
 	<h2 class="text-info"><?= $introduction ?></h2>
 	<hr/>
 	<?php
-	echo $this->Html->link(__('Get started!'), '#', ['class' => 'btn btn-lg btn-success'])
+	echo $this->Html->link(__('Get started!'), '/register', ['class' => 'btn btn-lg btn-success'])
 	?>
 </div>
