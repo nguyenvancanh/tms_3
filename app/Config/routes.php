@@ -3,9 +3,15 @@
 $prefix = 'admin';
 
 Router::connect('/', ['controller' => 'pages', 'action' => 'index']);
+Router::connect('/dashboard', ['controller' => 'users', 'action' => 'index']);
+Router::connect('/profile', ['controller' => 'users', 'action' => 'edit']);
+Router::connect('/edit/:event', ['controller' => 'users', 'action' => 'edit'], ['pass' => ['event'], 'event' => '[a-z]+']);
 Router::connect('/login', ['controller' => 'users', 'action' => 'login']);
 Router::connect('/register', ['controller' => 'users', 'action' => 'add']);
 Router::connect('/logout', ['controller' => 'users', 'action' => 'logout']);
+Router::connect("/tasks/:view", ['controller' => 'tasks', 'action' => 'index'], ['pass' => ['view'], 'view' => '[a-z]+']);
+Router::connect("/subjects/:view", ['controller' => 'subjects', 'action' => 'index'], ['pass' => ['view'], 'view' => '[a-z]+']);
+Router::connect("/courses/:view", ['controller' => 'courses', 'action' => 'index'], ['pass' => ['view'], 'view' => '[a-z]+']);
 Router::connect("/{$prefix}/:controller", [ 'prefix' => $prefix, "{$prefix}" => true]);
 /**
  * Restful router
@@ -19,6 +25,9 @@ Router::resourceMap([
 	['action' => 'update', 'method' => 'POST', 'id' => true]
 ]);
 Router::mapResources('users');
+Router::mapResources('subjects');
+Router::mapResources('tasks');
+Router::mapResources('courses');
 //map controller with prefix
 Router::mapResources('users', ['prefix' => $prefix]);
 /**
