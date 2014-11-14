@@ -125,13 +125,49 @@ class UsersController extends AppController {
 		$this->set(compact('actionHeading', 'actionSogan'));
 		if (!empty($this->data)) {
 			if ($this->User->save($this->data, TRUE)) {
-					$this->CustomUtil->flash(__('Edit successfully !'), 'success');
-					$this->redirect(array('controller' => 'users', 'action' => 'edit', $id, 'admin' => true));
+				$this->CustomUtil->flash(__('Edit successfully !'), 'success');
+				$this->redirect(array('controller' => 'users', 'action' => 'edit', $id, 'admin' => true));
 			} else {
 				$this->CustomUtil->flash(__('Can not save the change !'), 'error');
-				}
+			}
 		} else {
 			$this->data = $this->User->read(null, $id);
+		}
+	}
+
+	public function edit($event = null) {
+		$actionHeading = __("Edit profile");
+		$actionSogan = __("Please input all fields");
+		$this->set(compact('actionHeading', 'actionSogan'));
+		$userId = $this->CustomAuth->user('id');
+		switch ($event) {
+			case 'password':
+				if ($this->request->is('post')) {
+					$this->User->id = $userId;
+					if ($this->User->save($this->data, true)) {
+						$this->CustomUtil->flash(__('Change password successfully !'), 'success');
+					}
+				}
+				$this->render('change_password');
+				break;
+			default :
+				if (!empty($this->data)) {
+					$data_input = $this->data;
+					$data_sql = $this->User->findById($userId);
+					$data_compare = array_intersect($data_input['User'], $data_sql['User']);
+					if (count($data_compare) == 3) {
+						$this->CustomUtil->flash(__('Nothing to change !'), 'warning');
+						$this->redirect(array('controller' => 'users', 'action' => 'edit'));
+					} else {
+						if ($this->User->save($this->data, true)) {
+							$this->CustomUtil->flash(__('Edit Profile successfully !'), 'success');
+							$this->redirect(array('controller' => 'users', 'action' => 'edit'));
+						}
+					}
+				} else {
+					$this->data = $this->User->read(null, $userId);
+				}
+				break;
 		}
 	}
 
