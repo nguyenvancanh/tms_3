@@ -7,7 +7,13 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" href="index.html"><?= __('Home'); ?></a>
+		<?php
+		if (CustomAuthComponent::user('is_admin')):
+			echo $this->Html->link(__('Admin Management'), '/', ['class' => 'navbar-brand']);
+		else:
+			echo $this->Html->link(__('Training System'), '/', ['class' => 'navbar-brand']);
+		endif;
+		?>
 	</div>
 	<!-- /.navbar-header -->
 
@@ -35,53 +41,92 @@
 		<!-- /.dropdown -->
 		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-				<i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+				<i class="fa fa-user fa-fw"></i><?php echo CustomAuthComponent::user('name'); ?>  <i class="fa fa-caret-down"></i>
 			</a>
 			<ul class="dropdown-menu dropdown-user">
-
-			</ul>
-			<!-- /.dropdown-user -->
+				<li><?php echo $this->Html->link('<i class="fa fa-user fa-fw"></i>&nbsp' . __('View Profile'), '/profile', ['escape' => false]); ?></li>
+				<li><?php echo $this->Html->link('<i class="fa fa-key fa-fw"></i>&nbsp' . __('Edit Password'), '/edit/password', ['escape' => false]); ?></li>
 		</li>
-		<!-- /.dropdown -->
+		<li class="divider"></li>
+		<li><?php echo $this->Html->link('<i class="fa fa-sign-out fa-fw"></i>&nbsp' . __('Logout'), '/logout', ['escape' => false]); ?></li>
 	</ul>
-	<!-- /.navbar-top-links -->
+	<!-- /.dropdown-user -->
+</li>
+<!-- /.dropdown -->
+</ul>
+<!-- /.navbar-top-links -->
 
-	<div class="navbar-default sidebar" role="navigation">
-		<div class="sidebar-nav navbar-collapse">
-			<ul class="nav" id="side-menu">
+<div class="navbar-default sidebar" role="navigation">
+	<div class="sidebar-nav navbar-collapse">
+		<ul class="nav" id="side-menu">
+			<li><?php echo $this->Html->link('<i class="fa fa-home fa-fw"></i>&nbsp' . __('Dashboard'), '/dashboard', ['escape' => false]); ?></li>
+			<li>
+				<a href="#"><i class="fa fa-cog fa-fw"></i>&nbsp;<?php echo __('Settings'); ?><span class="fa arrow"></span></a>
+				<ul class="nav nav-second-level">
+					<li><?php echo $this->Html->link(__('Basic Info'), '/profile', ['escape' => false]); ?></li>
+					<li><?php echo $this->Html->link(__('Edit Profile'), '/edit/profile', ['escape' => false, 'id' => 'EditProfile']); ?></li>
+					<li><?php echo $this->Html->link(__('Change Password'), '/edit/password', ['escape' => false, 'id' => 'EditPassword']); ?></li>
+				</ul>
+				<!-- /.nav-second-level -->
+			</li>
+			<li>
+				<a href="#"><i class="fa fa-tasks fa-fw"></i>&nbsp;<?php echo __('Tasks'); ?><span class="fa arrow"></span></a>
+				<ul class="nav nav-second-level">
+					<li><?php echo $this->Html->link(__('Progress'), '/tasks/progress', ['escape' => false]); ?></li>
+					<li><?php echo $this->Html->link(__('Assigned Tasks '), '/tasks/avaiables', ['escape' => false]); ?></li>
+				</ul>
+				<!-- /.nav-second-level -->
+			</li>
+			<li>
+				<a href="#"><i class="fa fa-list-alt fa-fw"></i>&nbsp;<?php echo __('Subjects'); ?><span class="fa arrow"></span></a>
+				<ul class="nav nav-second-level">
+					<li><?php echo $this->Html->link(__('Progress'), '/subjects/progress', ['escape' => false]); ?></li>
+					<li><?php echo $this->Html->link(__('All Subjects'), '/subjects', ['escape' => false]); ?></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;<?php echo __('Courses'); ?><span class="fa arrow"></span></a>
+				<ul class="nav nav-second-level">
+					<li><?php echo $this->Html->link(__('All Courses'), '/courses', ['escape' => false]); ?></li>
+					<li><?php echo $this->Html->link(__('Courses Joined'), '/courses/joined', ['escape' => false]); ?></li>
+
+				</ul>
+			</li>
+			<?php if (CustomAuthComponent::user('is_admin')): ?>
 				<li>
-					<a href="#"><i class="fa fa-home fa-fw"></i>&nbsp;<?= __('Dashboard'); ?></a>
-				</li>
-				<li>
-					<a href="#"><i class="fa fa-cog fa-fw"></i>&nbsp;<?= __('Settings'); ?><span class="fa arrow"></span></a>
+					<a href="#"><i class="fa fa-user fa-fw"></i>&nbsp;<?php echo __('Manage Users'); ?><span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
-						<li>
-							<a href="#"></i>&nbsp;<?= __('Profiles'); ?></a>
-						</li>
-						<li>
-							<a href="#"></i>&nbsp;<?= __('Change password'); ?></a>
-						</li>
+						<li><?php echo $this->Html->link(__('Add User'), ['controller' => 'users', 'action' => 'add', 'admin' => true], ['escape' => false]); ?></li>
+						<li><?php echo $this->Html->link(__('Manage Users'), ['controller' => 'users', 'action' => 'index', 'admin' => true], ['escape' => false]); ?></li>
 					</ul>
 					<!-- /.nav-second-level -->
 				</li>
 				<li>
-					<a href="#"><i class="fa fa-tasks fa-fw"></i>&nbsp;<?= __('Tasks'); ?><span class="fa arrow"></span></a>
+					<a href="#"><i class="fa fa-tasks fa-fw"></i>&nbsp;<?php echo __('Manage Tasks'); ?><span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
-						<li>
-							<a href="#"></i>&nbsp;<?= __('Default'); ?></a>
-						</li>
+						<li><?php echo $this->Html->link(__('Assign a task'), ['controller' => 'tasks', 'action' => 'add', 'admin' => true], ['escape' => false]); ?></li>
+						<li><?php echo $this->Html->link(__('Manage Tasks'), ['controller' => 'tasks', 'action' => 'index', 'admin' => true], ['escape' => false]); ?></li>
 					</ul>
 					<!-- /.nav-second-level -->
 				</li>
 				<li>
-					<a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;<?= __('Courses'); ?></a>
+					<a href="#"><i class="fa fa-list-alt fa-fw"></i>&nbsp;<?php echo __('Manage Subjects'); ?><span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li><?php echo $this->Html->link(__('Add Subjects'), ['controller' => 'subjects', 'action' => 'add', 'admin' => true], ['escape' => false]); ?></li>
+						<li><?php echo $this->Html->link(__('Manage Subjects'), ['controller' => 'subjects', 'action' => 'index', 'admin' => true], ['escape' => false]); ?></li>
+					</ul>
 				</li>
 				<li>
-					<a href="#"><i class="fa fa-list-alt fa-fw"></i>&nbsp;<?= __('Subjects'); ?></a>
+					<a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;<?php echo __('Manage Courses'); ?><span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li><?php echo $this->Html->link(__('Add Courses'), ['controller' => 'courses', 'action' => 'add', 'admin' => true], ['escape' => false]); ?></li>
+						<li><?php echo $this->Html->link(__('Manage Courses'), ['controller' => 'courses', 'action' => 'index', 'admin' => true], ['escape' => false]); ?></li>
+					</ul>
 				</li>
-			</ul>
-		</div>
-		<!-- /.sidebar-collapse -->
+			<?php endif; ?>
+		</ul>
 	</div>
-	<!-- /.navbar-static-side -->
+	<!-- /.sidebar-collapse -->
+</div>
+<!-- /.navbar-static-side -->
 </nav>
