@@ -36,6 +36,10 @@ class User extends AppModel {
 		'password_confirm' => [
 			'rule' => 'passwordEqualValidation',
 			'message' => 'Confirm password not correct',
+		],
+		'old_password' => [
+			'rule' => 'checkPass',
+			'message' => 'Old password not match'
 		]
 	];
 	public $validationSets = [
@@ -111,9 +115,21 @@ class User extends AppModel {
 	public function passwordEqualValidation() {
 		return ($this->data[$this->alias]['password_confirm'] == $this->data[$this->alias]['password']);
 	}
-	
+
 	public function getRole() {
 		$role = [0 => __('Member'), 1 => __('Admin')];
 		return $role;
 	}
+
+	public function checkPass() {
+		$userId = CustomAuthComponent::user('id');
+		$data_user = $this->findById($userId);
+		$old_password = $this->data[$this->alias]['old_password'];
+		if ($data_user['User']['password'] == CustomAuthComponent::password($old_password)) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
 }
