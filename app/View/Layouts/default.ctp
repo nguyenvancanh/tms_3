@@ -13,14 +13,18 @@
 			'bootstrap.min',
 			'plugins/metisMenu/metisMenu.min.css',
 			'sb-admin-2.css',
-			'font-awesome-4.1.0/css/font-awesome.min.css',
-			'style'
+			'//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css',
+			'style',
+			'bootstrap-select.min',
+			'bootstrap-table'
 		]);
 		echo $this->Html->script([
 			'jquery',
 			'bootstrap.min',
 			'plugins/metisMenu/metisMenu.min',
-			'sb-admin-2.js'
+			'sb-admin-2.js',
+			'bootstrap-select.min',
+			'bootstrap-table'
 		]);
 		?>
 		<!--[if lt IE 9]>
@@ -53,6 +57,5 @@
 				<?php echo $this->fetch('content'); ?>
 			</div>
 		<?php endif; ?>
-
 	</body>
 </html>
