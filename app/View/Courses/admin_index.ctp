@@ -20,15 +20,15 @@ echo $this->Form->create(null, [
 	'class' => 'form-inline',
 	'action' => 'index'
 ]);
+echo $this->Form->input('keyword', [
+	'class' => 'form-control ',
+	'placeholder' => __('Search course'),
+]);
 $optionsEnd = [
 	'label' => __('Search'),
 	'class' => 'btn btn-default form-control',
 	'div' => false
 ];
-echo $this->Form->input('keyword', [
-	'class' => 'form-control ',
-	'placeholder' => __('Search course'),
-]);
 echo $this->Form->end($optionsEnd);
 ?>
 <table class="table table-hover table-responsive" id="table">
@@ -69,10 +69,4 @@ echo $this->Form->end($optionsEnd);
 		?>
 	</tbody>
 </table>
-<ul class="pagination">
-	<?php
-	echo $this->Paginator->prev(__('Previous'), ['tag' => 'li'], null, ['tag' => 'li', 'class' => 'disabled', 'disabledTag' => 'a']);
-	echo $this->Paginator->numbers(['separator' => '', 'currentTag' => 'a', 'currentClass' => 'active', 'tag' => 'li', 'first' => 1]);
-	echo $this->Paginator->next(__('Next'), ['tag' => 'li', 'currentClass' => 'disabled'], null, ['tag' => 'li', 'class' => 'disabled', 'disabledTag' => 'a']);
-	?>
-</ul>
+<?php echo $this->element('pagination'); ?>

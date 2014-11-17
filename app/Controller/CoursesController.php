@@ -59,7 +59,8 @@ class CoursesController extends AppController {
 		}
 		if (isset($this->data) && !empty($this->data)) {
 			// Here check request data and old data if nothing is changed => not perform updates
-			if (count(array_intersect($this->data['Course'], $course['Course'])) <= 1) {
+			$fieldsChanged = Course::TOTAL_FIELDS_MODIFY - count(array_intersect($this->data['Course'], $course['Course']));
+			if ($fieldsChanged > 0) {
 				$this->Course->id = $id;
 				if ($this->Course->save($this->data, true)) {
 					$this->CustomUtil->flash(__('Course informations has been successfully saved!'), 'success');
