@@ -121,7 +121,7 @@ class User extends AppModel {
 	}
 
 	public function getRole() {
-		$role = [0 => __('Member'), 1 => __('Admin')];
+		$role = [0 => __('Member'), 1 => '<span class="text-danger">' . __('Admin') . '</span>'];
 		return $role;
 	}
 
@@ -136,9 +136,12 @@ class User extends AppModel {
 		}
 	}
 
-	public function getByCourseId($id = null) {
-		$subQuery = "User.id IN(SELECT user_id FROM users_courses WHERE course_id ={$id})";
-		$users = $this->find('all', ['conditions' => [$subQuery]]);
+	public function getByCourseId($courseId, $joined = true) {
+		$conditions = ["User.id NOT IN(SELECT user_id FROM users_courses WHERE course_id =$courseId)"];
+		if ($joined) {
+			$conditions = ["User.id IN(SELECT user_id FROM users_courses WHERE course_id =$courseId)"];
+		}
+		$users = $this->find('all', ['conditions' => $conditions]);
 		return $users;
 	}
 

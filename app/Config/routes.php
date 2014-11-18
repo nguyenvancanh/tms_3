@@ -13,6 +13,7 @@ Router::connect("/tasks/:view", ['controller' => 'tasks', 'action' => 'index'], 
 Router::connect("/subjects/:view", ['controller' => 'subjects', 'action' => 'index'], ['pass' => ['view'], 'view' => '[a-z]+']);
 Router::connect("/courses/:view", ['controller' => 'courses', 'action' => 'index'], ['pass' => ['view'], 'view' => '[a-z]+']);
 Router::connect("/{$prefix}/:controller", [ 'prefix' => $prefix, "{$prefix}" => true]);
+Router::connect("/{$prefix}/add/:event", ['controller' => 'courses', 'action' => 'add', "{$prefix}" => true], ['pass' => ['event'], 'event' => '[a-z]+']);
 /**
  * Restful router
  */

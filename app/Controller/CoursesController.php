@@ -129,14 +129,44 @@ class CoursesController extends AppController {
 		]);
 	}
 
-	public function admin_add() {
-		$this->set('pageHeader', __('Add new course'));
-		if (isset($this->data) && !empty($this->data)) {
-			$this->Course->create();
-			if ($this->Course->save($this->data)) {
-				$this->CustomUtil->flash(__('New course have been successfully created!'), 'success');
-				return $this->redirect(['controller' => 'courses', 'action' => 'add', 'admin' => true]);
-			}
+	public function admin_add($event = null, $id = null) {
+		switch ($event) {
+			case 'user':
+				$title = __('Admin add user to the course');
+				$courses = $this->Course->find('list');
+				$users = $this->User->find('all');
+				$role = $this->User->getRole();
+				if ($this->request->is('post') && !empty($this->data['Course']['course_id'])) {
+					$selectedCourse = $this->data['Course']['course_id'];
+					if (!empty($selectedCourse)) {
+						$this->Session->write('selectedCourse', $selectedCourse);
+					}
+				}
+				if ($this->Session->check('selectedCourse')) {
+					$courseId = $this->Session->read('selectedCourse');
+					$users = $this->User->getByCourseId($courseId, FALSE);
+					if ($this->User->exists($id)) {
+						$memberCourse = ['user_id' => $id, 'course_id' => $courseId];
+						$this->CourseMember->create();
+						if ($this->CourseMember->save($memberCourse)) {
+							$this->CustomUtil->flash("Add user # {$id} to course {$courses[$courseId]} successfully!", 'success');
+							$this->redirect(['controller' => 'courses', 'action' => 'add', 'user', 'admin' => true]);
+						}
+					}
+				}
+				$this->set(compact('users', 'courses', 'title', 'role'));
+				$this->render('admin_add_users');
+				break;
+			default :
+				$this->set('pageHeader', __('Add new course'));
+				if (isset($this->data) && !empty($this->data)) {
+					$this->Course->create();
+					if ($this->Course->save($this->data)) {
+						$this->CustomUtil->flash(__('New course have been successfully created!'), 'success');
+						return $this->redirect(['controller' => 'courses', 'action' => 'add', 'admin' => true]);
+					}
+				}
+				break;
 		}
 	}
 
