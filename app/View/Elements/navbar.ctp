@@ -44,8 +44,9 @@
 				<i class="fa fa-user fa-fw"></i><?php echo CustomAuthComponent::user('name'); ?>  <i class="fa fa-caret-down"></i>
 			</a>
 			<ul class="dropdown-menu dropdown-user">
-				<li><?php echo $this->Html->link('<i class="fa fa-user fa-fw"></i>&nbsp' . __('View Profile'), '/profile', ['escape' => false]); ?></li>
+				<li><?php echo $this->Html->link('<i class="fa fa-user fa-fw"></i>&nbsp' . __('View Profile'), '/users/view', ['escape' => false]); ?></li>
 				<li><?php echo $this->Html->link('<i class="fa fa-key fa-fw"></i>&nbsp' . __('Edit Password'), '/edit/password', ['escape' => false]); ?></li>
+			</ul>
 		</li>
 		<li class="divider"></li>
 		<li><?php echo $this->Html->link('<i class="fa fa-sign-out fa-fw"></i>&nbsp' . __('Logout'), '/logout', ['escape' => false]); ?></li>
@@ -63,17 +64,9 @@
 			<li>
 				<a href="#"><i class="fa fa-cog fa-fw"></i>&nbsp;<?php echo __('Settings'); ?><span class="fa arrow"></span></a>
 				<ul class="nav nav-second-level">
-					<li><?php echo $this->Html->link(__('Basic Info'), '/profile', ['escape' => false]); ?></li>
+					<li><?php echo $this->Html->link(__('Basic Info'), '/users/view', ['escape' => false]); ?></li>
 					<li><?php echo $this->Html->link(__('Edit Profile'), '/edit/profile', ['escape' => false, 'id' => 'EditProfile']); ?></li>
 					<li><?php echo $this->Html->link(__('Change Password'), '/edit/password', ['escape' => false, 'id' => 'EditPassword']); ?></li>
-				</ul>
-				<!-- /.nav-second-level -->
-			</li>
-			<li>
-				<a href="#"><i class="fa fa-tasks fa-fw"></i>&nbsp;<?php echo __('Tasks'); ?><span class="fa arrow"></span></a>
-				<ul class="nav nav-second-level">
-					<li><?php echo $this->Html->link(__('Progress'), '/tasks/progress', ['escape' => false]); ?></li>
-					<li><?php echo $this->Html->link(__('Assigned Tasks '), '/tasks/avaiables', ['escape' => false]); ?></li>
 				</ul>
 				<!-- /.nav-second-level -->
 			</li>
@@ -98,14 +91,6 @@
 					<ul class="nav nav-second-level">
 						<li><?php echo $this->Html->link(__('Add User'), ['controller' => 'users', 'action' => 'add', 'admin' => true], ['escape' => false]); ?></li>
 						<li><?php echo $this->Html->link(__('Manage Users'), ['controller' => 'users', 'action' => 'index', 'admin' => true], ['escape' => false]); ?></li>
-					</ul>
-					<!-- /.nav-second-level -->
-				</li>
-				<li>
-					<a href="#"><i class="fa fa-tasks fa-fw"></i>&nbsp;<?php echo __('Manage Tasks'); ?><span class="fa arrow"></span></a>
-					<ul class="nav nav-second-level">
-						<li><?php echo $this->Html->link(__('Assign a task'), ['controller' => 'tasks', 'action' => 'add', 'admin' => true], ['escape' => false]); ?></li>
-						<li><?php echo $this->Html->link(__('Manage Tasks'), ['controller' => 'tasks', 'action' => 'index', 'admin' => true], ['escape' => false]); ?></li>
 					</ul>
 					<!-- /.nav-second-level -->
 				</li>

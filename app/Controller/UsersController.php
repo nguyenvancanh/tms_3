@@ -16,6 +16,7 @@ App::import('Model', 'User');
 
 class UsersController extends AppController {
 
+	public $uses = ['User'];
 	public $paginate = ['User' => ['limit' => User::LIMIT_PER_PAGES]];
 
 	public function beforeFilter() {
@@ -135,6 +136,16 @@ class UsersController extends AppController {
 		}
 	}
 
+	public function admin_view($id = null) {
+		$user = null;
+		$title = __('View User profile');
+		if ($this->User->exists($id)) {
+			$role = $this->User->getRole();
+			$user = $this->User->read(null, $id);
+		}
+		$this->set(compact('role', 'title', 'user'));
+	}
+
 	public function edit($event = null) {
 		$actionHeading = __("Edit profile");
 		$actionSogan = __("Please input all fields");
@@ -169,6 +180,13 @@ class UsersController extends AppController {
 				}
 				break;
 		}
+	}
+
+	public function view() {
+		$title = __('View Profile');
+		$userId = CustomAuthComponent::user('id');
+		$user = $this->User->read(null, $userId);
+		$this->set(compact('title', 'user'));
 	}
 
 }
