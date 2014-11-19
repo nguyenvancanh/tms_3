@@ -70,14 +70,6 @@
 				<!-- /.nav-second-level -->
 			</li>
 			<li>
-				<a href="#"><i class="fa fa-tasks fa-fw"></i>&nbsp;<?php echo __('Tasks'); ?><span class="fa arrow"></span></a>
-				<ul class="nav nav-second-level">
-					<li><?php echo $this->Html->link(__('Progress'), '/tasks/progress', ['escape' => false]); ?></li>
-					<li><?php echo $this->Html->link(__('Assigned Tasks '), '/tasks/avaiables', ['escape' => false]); ?></li>
-				</ul>
-				<!-- /.nav-second-level -->
-			</li>
-			<li>
 				<a href="#"><i class="fa fa-list-alt fa-fw"></i>&nbsp;<?php echo __('Subjects'); ?><span class="fa arrow"></span></a>
 				<ul class="nav nav-second-level">
 					<li><?php echo $this->Html->link(__('Progress'), '/subjects/progress', ['escape' => false]); ?></li>
@@ -98,14 +90,6 @@
 					<ul class="nav nav-second-level">
 						<li><?php echo $this->Html->link(__('Add User'), ['controller' => 'users', 'action' => 'add', 'admin' => true], ['escape' => false]); ?></li>
 						<li><?php echo $this->Html->link(__('Manage Users'), ['controller' => 'users', 'action' => 'index', 'admin' => true], ['escape' => false]); ?></li>
-					</ul>
-					<!-- /.nav-second-level -->
-				</li>
-				<li>
-					<a href="#"><i class="fa fa-tasks fa-fw"></i>&nbsp;<?php echo __('Manage Tasks'); ?><span class="fa arrow"></span></a>
-					<ul class="nav nav-second-level">
-						<li><?php echo $this->Html->link(__('Assign a task'), ['controller' => 'tasks', 'action' => 'add', 'admin' => true], ['escape' => false]); ?></li>
-						<li><?php echo $this->Html->link(__('Manage Tasks'), ['controller' => 'tasks', 'action' => 'index', 'admin' => true], ['escape' => false]); ?></li>
 					</ul>
 					<!-- /.nav-second-level -->
 				</li>
