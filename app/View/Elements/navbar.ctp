@@ -70,6 +70,12 @@
 				</ul>
 				<!-- /.nav-second-level -->
 			</li>
+			<li class="active">
+				<a href="#"><i class="fa fa-file-text-o fa-fw"></i>&nbsp;<?php echo __('Report'); ?><span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li><?php echo $this->Html->link(__('Write'), ['controller' => 'reports', 'action' => 'add', 'admin' => false], ['escape' => false]); ?></li>
+					</ul>
+				</li>
 			<li>
 				<a href="#"><i class="fa fa-list-alt fa-fw"></i>&nbsp;<?php echo __('Subjects'); ?><span class="fa arrow"></span></a>
 				<ul class="nav nav-second-level">
@@ -106,6 +112,7 @@
 					<ul class="nav nav-second-level">
 						<li><?php echo $this->Html->link(__('Add Courses'), ['controller' => 'courses', 'action' => 'add', 'admin' => true], ['escape' => false]); ?></li>
 						<li><?php echo $this->Html->link(__('Add Users'), ['controller' => 'courses', 'action' => 'add', 'admin' => true, 'user'], ['escape' => false]); ?></li>
+						<li><?php echo $this->Html->link(__('Remove Member'), ['controller' => 'courses', 'action' => 'delete', 'admin' => true, 'user'], ['escape' => false]); ?></li>
 						<li><?php echo $this->Html->link(__('Manage Courses'), ['controller' => 'courses', 'action' => 'index', 'admin' => true], ['escape' => false]); ?></li>
 					</ul>
 				</li>

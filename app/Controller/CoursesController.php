@@ -199,18 +199,50 @@ class CoursesController extends AppController {
 		]);
 	}
 
-	public function admin_delete($id = null) {
-		$this->autoRender = false;
-		if ($this->Course->exists($id)) {
-			if ($this->Course->delete($id, true)) {
-				$this->CustomUtil->flash(__("Course # {$id} has been successfully deleted !"), 'success');
-			} else {
-				$this->CustomUtil->flash(__("Can't delete course # {$id}, please try again later !"), 'error');
-			}
-		} else {
-			$this->CustomUtil->flash(__('Course not found!'), 'error');
+	public function admin_delete($param = null, $id = null) {
+		switch ($param) {
+			case 'user':
+				$title = __('Admin remove user of course');
+				$courses = $this->Course->find('list');
+				$role = $this->User->getRole();
+				if ($this->request->is('post') && !empty($this->data['Course']['course_id'])) {
+					$selectedCourse = $this->data['Course']['course_id'];
+					if (!empty($selectedCourse)) {
+						$this->Session->write('selectedCourse', $selectedCourse);
+					}
+				}
+				if ($this->Session->check('selectedCourse')) {
+					$courseId = $this->Session->read('selectedCourse');
+					$users = $this->User->getByCourseId($courseId, TRUE);
+					if ($this->User->exists($id)) {
+						$conditions = ['user_id' => $id, 'course_id' => $courseId];
+						$userCourse = $this->CourseMember->find('first', ['conditions' => $conditions]);
+						$courseMemberId = $userCourse['CourseMember']['id'];
+						if ($this->CourseMember->delete($courseMemberId)) {
+							$this->CustomUtil->flash(__("User # {$id} has been removed of Course # {$courseId} !"), 'success');
+							$this->redirect(['controller' => 'courses', 'action' => 'delete', 'user', 'admin' => TRUE]);
+						} else {
+							$this->CustomUtil->flash(__("Can not remove User # {$id} of Course # {$courseId}!"), 'error');
+						}
+					}
+				}
+				$this->set(compact('users', 'courses', 'role', 'title'));
+				$this->render('admin_remove_user');
+				break;
+			default :
+				$this->autoRender = false;
+				if ($this->Course->exists($param)) {
+					if ($this->Course->delete($param, true)) {
+						$this->CustomUtil->flash(__("Course # {$param} has been successfully deleted !"), 'success');
+					} else {
+						$this->CustomUtil->flash(__("Can't delete course # {$param}, please try again later !"), 'error');
+					}
+				} else {
+					$this->CustomUtil->flash(__('Course not found!'), 'error');
+				}
+				return $this->redirect(['controller' => 'courses', 'action' => 'index', 'admin' => true]);
+				break;
 		}
-		return $this->redirect(['controller' => 'courses', 'action' => 'index', 'admin' => true]);
 	}
 
 }

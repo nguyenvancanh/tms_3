@@ -11,7 +11,8 @@ class User extends AppModel {
 	public $hasMany = [
 		'CourseMember' => ['dependent' => true],
 		'UserSubject' => ['dependent' => true],
-		'Activity' => ['order' => ['id' => 'desc'], 'dependent' => true]
+		'Activity' => ['order' => ['id' => 'desc'], 'dependent' => true],
+		'Report' => ['dependent' => true]
 	];
 	public $validate = [
 		'username' => [
