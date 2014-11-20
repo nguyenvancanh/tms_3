@@ -59,43 +59,37 @@
 	?>
 </div>
 <div class="col-md-12">
-<br>
-<?php
-	echo $this->Session->flash('notify');
-	if (isset($users) && is_array($users)):
-?>
-<table class="table table-hover">
-	<tr>
-		<td><?php echo __("ID"); ?></td>
-		<td><?php echo __("Username"); ?></td>
-		<td><?php echo __("Fullname"); ?></td>
-		<td><?php echo __("Role"); ?></td>
-		<td><?php echo __("Modified"); ?></td>
-		<td colspan="2"><?php echo __("Action"); ?></td>
-	</tr>
-	<?php
-		if (!empty($users)):
-			foreach ($users as $user):
-	?>
-	<tr>
-		<td><?php echo $user['User']['id']; ?></td>
-		<td><?php echo $user['User']['username']; ?></td>
-		<td><?php echo $user['User']['name']; ?></td>
-		<td><?php echo $role[$user['User']['is_admin']] ;?></td>
-		<td><?php echo $user['User']['modified']; ?></td>
-		<td><?php echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', ['controller' => 'users', 'action' => 'edit', $user['User']['id'], 'admin' => true], ['escape' => false, 'class' => 'pad-r-10']) ;?></td>
-		<td><?php echo $this->Form->postLink('<i class="glyphicon glyphicon-trash"></i>', ['action' => 'delete', $user['User']['id']], ['escape' => false], __('Are you sure you want to delete # %s ?', $user['User']['id'])) ;?></td>
-	</tr>
-	<?php
-			endforeach;
-		else:
-			echo __("User not found");
-		endif;
-	?>
-</table>
-<?php
-	endif;
-?>
-<br>
-<?php echo $this->element('pagination'); ?>
+	<?php echo $this->Session->flash('notify'); ?>
+	<?php if (isset($users) && is_array($users)): ?>
+		<table class="table table-hover">
+			<p  class="text-center"><?php echo __('Showing page ') . $this->Paginator->counter(); ?></p>
+			<tr>
+				<td><?php echo __("ID"); ?></td>
+				<td><?php echo __("Username"); ?></td>
+				<td><?php echo __("Fullname"); ?></td>
+				<td><?php echo __("Role"); ?></td>
+				<td><?php echo __("Modified"); ?></td>
+				<td colspan="2"><?php echo __("Action"); ?></td>
+			</tr>
+			<?php if (!empty($users)): ?>
+				<?php foreach ($users as $user): ?>
+					<tr>
+						<td><?php echo $user['User']['id']; ?></td>
+						<td><?php echo $user['User']['username']; ?></td>
+						<td><?php echo $user['User']['name']; ?></td>
+						<td><?php echo $role[$user['User']['is_admin']]; ?></td>
+						<td><?php echo $user['User']['modified']; ?></td>
+						<td><?php echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', ['controller' => 'users', 'action' => 'view', $user['User']['id'], 'admin' => true], ['escape' => false, 'class' => 'pad-r-10']); ?></td>
+						<td><?php echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', ['controller' => 'users', 'action' => 'edit', $user['User']['id'], 'admin' => true], ['escape' => false, 'class' => 'pad-r-10']); ?></td>
+						<td><?php echo $this->Form->postLink('<i class="glyphicon glyphicon-trash"></i>', ['action' => 'delete', $user['User']['id']], ['escape' => false], __('Are you sure you want to delete # %s ?', $user['User']['id'])); ?></td>
+					</tr>
+			<?php
+				endforeach;
+			else:
+				echo __("User not found");
+			endif;
+			?>
+		</table>
+	<?php endif; ?>
+	<?php echo $this->element('pagination'); ?>
 </div>
