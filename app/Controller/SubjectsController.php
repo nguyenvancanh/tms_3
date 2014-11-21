@@ -15,11 +15,56 @@ App::import('Model', 'Subject');
  */
 class SubjectsController extends AppController {
 
-	public $uses = ['Subject', 'Course'];
+	const COMPLETED_ALL_TASK = 100;
+
+	public $uses = ['Subject', 'Course', 'UserSubject', 'CourseMember', 'Activity'];
 	public $paginate = ['Subject' => ['limit' => Subject::LIMIT_PER_PAGES]];
 
 	public function index() {
-		
+		$pageHeader = __('All tasks');
+		$userId = CustomAuthComponent::user('id');
+		$courses = $this->Course->find('list');
+		$courses += [ 0 => __('All')];
+		ksort($courses);
+		$subjects = $this->Subject->get($userId);
+		if ($this->request->is('get') && !empty($this->request->query('courseId'))) {
+			$courseId = $this->request->query('courseId');
+			if ($this->Course->exists($courseId)) {
+				$pageHeader .= __(' in course ') . $courses[$courseId];
+				$subjects = $this->Subject->get($userId, $courseId);
+			}
+		}
+		$this->paginate('Subject');
+		$this->set(compact('pageHeader', 'subjects', 'courses', 'status'));
+	}
+
+	public function add($id = null, $courseId = null) {
+		$this->autoRender = false;
+		$redirect = ['action' => 'index'];
+		$userId = CustomAuthComponent::user('id');
+		$userTask = $this->UserSubject->get($id, $courseId, 'id');
+		$totalTasks = $this->Subject->findAllByCourseId($courseId);
+		if (empty($totalTasks) || empty($userTask)) {
+			$this->CustomUtil->flash(__('Something wrong, please try again.'), 'warning');
+			return $this->redirect($redirect);
+		}
+		if ($userTask['UserSubject']['status'] == Subject::STATUS_DONE) {
+			$this->CustomUtil->flash(__('Task already done at ') . $userTask['UserSubject']['modified'], 'warning');
+			return $this->redirect($redirect);
+		}
+		$this->UserSubject->id = $id;
+		if ($this->UserSubject->saveField('status', Subject::STATUS_DONE)) {
+			$progress = 1 / count($totalTasks) * 100;
+			$userCourse = $this->CourseMember->find('first', ['conditions' => ['user_id' => $userId, 'course_id' => $courseId]]);
+			$currentProgress = $userCourse['CourseMember']['completion'];
+			$data = ['completion' => 'completion +' . $progress];
+			if (ceil($currentProgress + $progress) == self::COMPLETED_ALL_TASK) {
+				$data = ['status' => Course::STATUS_FINISHED, 'completion' => self::COMPLETED_ALL_TASK];
+			}
+			$this->CourseMember->updateAll($data, ['user_id' => $userId, 'course_id' => $courseId]);
+			$this->CustomUtil->flash(__('Task done!'), 'success');
+			return $this->redirect($redirect);
+		}
 	}
 
 	public function admin_index() {

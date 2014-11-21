@@ -15,11 +15,99 @@ App::import('Model', 'Course');
  */
 class CoursesController extends AppController {
 
-	public $uses = ['Course', 'Activity', 'User'];
-	public $paginate = ['Course' => ['limit' => Course::LIMIT_PER_PAGES]];
+	public $uses = ['Course', 'Activity', 'User', 'Subject', 'CourseMember', 'UserSubject'];
+	public $paginate = [
+		'Course' => ['limit' => Course::LIMIT_PER_PAGES],
+		'User' => ['limit' => Course::LIMIT_PER_PAGES]
+	];
 
-	public function index() {
-		
+	public function index($param = null) {
+		$pageHeader = __('Choose Courses to join');
+		$userId = CustomAuthComponent::user('id');
+		$courses = $this->Course->getByUserId($userId);
+		if (!is_null($param) && $param == 'joined') {
+			$viewJoined = true;
+			$pageHeader = __('Courses joined');
+			$this->Course->bindModel(['hasMany' => ['CourseMember' => ['conditions' => ['CourseMember.user_id' => $userId]]]]);
+			$courses = $this->Course->getByUserId($userId, true);
+		}
+		$this->set([
+			'pageHeader' => $pageHeader,
+			'courses' => $courses,
+			'joined' => isset($viewJoined) ? true : false
+		]);
+	}
+
+	public function add($id = null) {
+		$this->autoRender = false;
+		$userId = CustomAuthComponent::user('id');
+		$courses = $this->Course->get();
+		$redirectUrl = ['controller' => 'courses', 'action' => 'index'];
+		if (!$this->Course->exists($id)) {
+			return $this->redirect($redirectUrl);
+		}
+		$data = [
+			'user_id' => $userId,
+			'course_id' => $id
+		];
+		if ($this->CourseMember->save($data)) {
+			$this->CustomUtil->flash(__("Now that you have been joined to course {$courses[$id]}"), 'success');
+		}
+		return $this->redirect($redirectUrl);
+	}
+
+	public function start($id = null) {
+		$this->autoRender = false;
+		$redirect = ['action' => 'index', 'joined'];
+		$userId = CustomAuthComponent::user('id');
+		if (!$this->Course->exists($id)) {
+			return $this->redirect(['action' => 'index']);
+		}
+		$this->Subject->contain();
+		$subjects = $this->Subject->findAllByCourseId($id);
+		if (empty($subjects)) {
+			$this->CustomUtil->flash(__("Currently unable to start this course, please try again later!"), 'warning');
+			return $this->redirect($redirect);
+		}
+		$isExists = $this->UserSubject->get($userId, $id);
+		if ($isExists) {
+			$this->CustomUtil->flash(__('You have already started this course. View learning progress for more details.'), 'warning');
+			return $this->redirect($redirect);
+		}
+		$data = null;
+		foreach ($subjects as $key => $value) {
+			$data[$key] = [
+				'user_id' => $userId,
+				'subject_id' => $value['Subject']['id']
+			];
+		}
+		if ($this->UserSubject->saveMany($data)) {
+			$this->CourseMember->updateAll(['status' => Course::STATUS_STARTED], ['user_id' => $userId, 'course_id' => $id]);
+			$this->CustomUtil->flash(__('Course started successfully!'), 'success');
+			return $this->redirect($redirect);
+		}
+	}
+
+	public function view($id = null) {
+		$courses = $this->Course->get();
+		$pageHeader = __('All members in course ') . $courses[$id];
+		$users = $this->User->getByCourseId($id);
+		$this->paginate('User');
+		$this->set(compact('pageHeader', 'users'));
+	}
+
+	public function delete($id = null, $param = null) {
+		$this->autoRender = false;
+		$userId = CustomAuthComponent::user('id');
+		if (!$this->CourseMember->exists($id)) {
+			return $this->redirect(['controller' => 'courses', 'action' => 'index']);
+		}
+		if ($this->CourseMember->delete($id, true)) {
+			$course = $this->Course->findByName($param);
+			$this->UserSubject->deleteByUserId($userId, $course['Course']['id']);
+			$this->CustomUtil->flash(__("You have been leave the course {$param}"), 'success');
+		}
+		return $this->redirect(['controller' => 'courses', 'action' => 'index', 'joined']);
 	}
 
 	public function admin_index() {

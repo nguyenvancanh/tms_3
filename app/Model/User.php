@@ -8,6 +8,10 @@ class User extends AppModel {
 	const LIMIT_SEARCH_ITEMS = 20;
 
 	public $actsAs = ['Multivalidatable'];
+	public $hasMany = [
+		'CourseMember' => ['dependent' => true],
+		'UserSubject' => ['dependent' => true]
+	];
 	public $validate = [
 		'username' => [
 			'valid' => [
@@ -130,6 +134,12 @@ class User extends AppModel {
 		} else {
 			return FALSE;
 		}
+	}
+
+	public function getByCourseId($id = null) {
+		$subQuery = "User.id IN(SELECT user_id FROM users_courses WHERE course_id ={$id})";
+		$users = $this->find('all', ['conditions' => [$subQuery]]);
+		return $users;
 	}
 
 }
