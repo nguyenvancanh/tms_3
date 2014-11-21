@@ -19,7 +19,7 @@ class Subject extends AppModel {
 	const TOTAL_FIELDS_MODIFY = 4;
 	const STATUS_INPROGRESS = 0;
 	const STATUS_DONE = 1;
-	
+
 	public $actsAs = ['Containable'];
 	public $virtualFields = array(
 		'search' => 'CONCAT(Subject.name, " ", Subject.introduction)'
@@ -52,9 +52,7 @@ class Subject extends AppModel {
 				"Subject.id IN (SELECT subject_id FROM users_subjects WHERE user_id = {$userId})"
 				. "AND Subject.course_id = {$courseId}"];
 		}
-		$subjects = $this->find('all', [
-			'conditions' => $conditions
-		]);
+		$subjects = $this->find('all', ['conditions' => $conditions]);
 		return $subjects;
 	}
 

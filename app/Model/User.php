@@ -7,10 +7,11 @@ class User extends AppModel {
 	const LIMIT_PER_PAGES = 10;
 	const LIMIT_SEARCH_ITEMS = 20;
 
-	public $actsAs = ['Multivalidatable'];
+	public $actsAs = ['Multivalidatable', 'Containable'];
 	public $hasMany = [
 		'CourseMember' => ['dependent' => true],
-		'UserSubject' => ['dependent' => true]
+		'UserSubject' => ['dependent' => true],
+		'Activity' => ['order' => ['id' => 'desc'], 'dependent' => true]
 	];
 	public $validate = [
 		'username' => [

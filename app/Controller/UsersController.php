@@ -7,7 +7,7 @@
  */
 
 App::uses('AppController', 'Controller');
-
+App::uses('CakeTime', 'Utility');
 /**
  * CakePHP UsersController
  * @author thanhtr
@@ -16,8 +16,10 @@ App::import('Model', 'User');
 
 class UsersController extends AppController {
 
-	public $uses = ['User'];
-	public $paginate = ['User' => ['limit' => User::LIMIT_PER_PAGES]];
+	public $uses = ['User', 'Activity'];
+	public $paginate = [
+		'User' => ['limit' => User::LIMIT_PER_PAGES],
+	];
 
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -26,7 +28,12 @@ class UsersController extends AppController {
 
 	public function index() {
 		$pageHeader = __('Dashboard');
-		$this->set('pageHeader', $pageHeader);
+		$key = $this->Activity->getKey();
+		$action = $this->Activity->getAction();
+		$userId = CustomAuthComponent::user('id');
+		$this->paginate = ['limit' => Activity::LIMIT_PER_PAGES, 'order' => 'Activity.id desc', 'conditions' => ['Activity.user_id' => $userId]];
+		$activities = $this->paginate('Activity');
+		$this->set(compact('activities', 'key', 'action', 'pageHeader'));
 	}
 
 	public function login() {

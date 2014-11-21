@@ -44,6 +44,8 @@ class SubjectsController extends AppController {
 		$userId = CustomAuthComponent::user('id');
 		$userTask = $this->UserSubject->get($id, $courseId, 'id');
 		$totalTasks = $this->Subject->findAllByCourseId($courseId);
+		$courses = $this->Course->find('list');
+		$subjects = $this->Subject->find('list');
 		if (empty($totalTasks) || empty($userTask)) {
 			$this->CustomUtil->flash(__('Something wrong, please try again.'), 'warning');
 			return $this->redirect($redirect);
@@ -54,12 +56,14 @@ class SubjectsController extends AppController {
 		}
 		$this->UserSubject->id = $id;
 		if ($this->UserSubject->saveField('status', Subject::STATUS_DONE)) {
+			$this->Activity->write($userId, Activity::ACTION_DONE, Activity::SUBJECT, $subjects[$userTask['UserSubject']['subject_id']]);
 			$progress = 1 / count($totalTasks) * 100;
 			$userCourse = $this->CourseMember->find('first', ['conditions' => ['user_id' => $userId, 'course_id' => $courseId]]);
 			$currentProgress = $userCourse['CourseMember']['completion'];
 			$data = ['completion' => 'completion +' . $progress];
 			if (ceil($currentProgress + $progress) == self::COMPLETED_ALL_TASK) {
 				$data = ['status' => Course::STATUS_FINISHED, 'completion' => self::COMPLETED_ALL_TASK];
+				$this->Activity->write($userId, Activity::ACTION_DONE, Activity::COURSE, $courses[$courseId]);
 			}
 			$this->CourseMember->updateAll($data, ['user_id' => $userId, 'course_id' => $courseId]);
 			$this->CustomUtil->flash(__('Task done!'), 'success');
