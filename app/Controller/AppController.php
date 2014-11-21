@@ -6,7 +6,7 @@ class AppController extends Controller {
 
 	public $components = ['CustomUtil', 'CustomAuth', 'Session'];
 	public $layout = 'default';
-	public $helpers = ['Html', 'Form', 'Js', 'Paginator'];
+	public $helpers = ['Html', 'Form', 'Js', 'Paginator', 'Time'];
 
 	public function __construct($request = null, $response = null) {
 		parent::__construct($request, $response);

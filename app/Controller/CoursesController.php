@@ -51,6 +51,7 @@ class CoursesController extends AppController {
 			'course_id' => $id
 		];
 		if ($this->CourseMember->save($data)) {
+			$this->Activity->write($userId, Activity::ACTION_JOIN, Activity::COURSE, $courses[$id]);
 			$this->CustomUtil->flash(__("Now that you have been joined to course {$courses[$id]}"), 'success');
 		}
 		return $this->redirect($redirectUrl);
@@ -82,6 +83,8 @@ class CoursesController extends AppController {
 			];
 		}
 		if ($this->UserSubject->saveMany($data)) {
+			$courses = $this->Course->find('list');
+			$this->Activity->write($userId, Activity::ACTION_START, Activity::COURSE, $courses[$id]);
 			$this->CourseMember->updateAll(['status' => Course::STATUS_STARTED], ['user_id' => $userId, 'course_id' => $id]);
 			$this->CustomUtil->flash(__('Course started successfully!'), 'success');
 			return $this->redirect($redirect);
@@ -105,6 +108,7 @@ class CoursesController extends AppController {
 		if ($this->CourseMember->delete($id, true)) {
 			$course = $this->Course->findByName($param);
 			$this->UserSubject->deleteByUserId($userId, $course['Course']['id']);
+			$this->Activity->write($userId, Activity::ACTION_LEAVE, Activity::COURSE, $param);
 			$this->CustomUtil->flash(__("You have been leave the course {$param}"), 'success');
 		}
 		return $this->redirect(['controller' => 'courses', 'action' => 'index', 'joined']);

@@ -20,7 +20,7 @@ class Course extends AppModel {
 	const STATUS_DEFAULT = 0;
 	const STATUS_FINISHED = 1;
 	const STATUS_STARTED = 2;
-	
+
 	public $actsAs = ['Containable'];
 	public $hasMany = [
 		'Subject' => ['dependent' => true],
@@ -64,9 +64,7 @@ class Course extends AppModel {
 		if ($joined) {
 			$conditions = ["Course.id IN (SELECT course_id FROM users_courses WHERE user_id = {$userId})"];
 		}
-		$courses = $this->find('all', [
-			'conditions' => $conditions
-		]);
+		$courses = $this->find('all', ['conditions' => $conditions]);
 		return $courses;
 	}
 
