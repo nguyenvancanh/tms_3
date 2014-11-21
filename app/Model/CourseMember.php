@@ -16,5 +16,4 @@ class CourseMember extends AppModel {
 
 	public $useTable = 'users_courses';
 	public $belongsTo = ['User', 'Course'];
-
 }

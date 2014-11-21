@@ -21,7 +21,7 @@
 	margin-top: 15px;
 }
 :root input[type='text']:hover, :root input[type='password']:hover, :root input[type='email']:hover, :root input[type='number']:hover, :root input[type='tel']:hover, :root input[type='search']:hover, :root textarea:hover {
-border-color: #8f8f8f;
+	border-color: #8f8f8f;
 }
 .register {
 	margin-top: 50px;
@@ -42,4 +42,7 @@ border-color: #8f8f8f;
 	margin-bottom: 10px !important;
 	margin-left: 130px;
 	width: 100px !important;
+}
+.margin-r-10{
+	margin-right: 10px !important;
 }

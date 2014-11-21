@@ -44,7 +44,8 @@
 			echo $this->Form->input('is_admin', [
 				'type' => 'select',
 				'options' => $role,
-				'class' => 'form-control'
+				'class' => 'form-control',
+				'escape' =>false
 			]);
 
 			$submitOptions = [

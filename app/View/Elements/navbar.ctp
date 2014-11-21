@@ -105,6 +105,7 @@
 					<a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;<?php echo __('Manage Courses'); ?><span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
 						<li><?php echo $this->Html->link(__('Add Courses'), ['controller' => 'courses', 'action' => 'add', 'admin' => true], ['escape' => false]); ?></li>
+						<li><?php echo $this->Html->link(__('Add Users'), ['controller' => 'courses', 'action' => 'add', 'admin' => true, 'user'], ['escape' => false]); ?></li>
 						<li><?php echo $this->Html->link(__('Manage Courses'), ['controller' => 'courses', 'action' => 'index', 'admin' => true], ['escape' => false]); ?></li>
 					</ul>
 				</li>
